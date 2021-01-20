@@ -58,6 +58,8 @@ class Detector:
         except CvBridgeError as cve:
             rospy.logerr(str(cve))
             return
+        
+        outputs = self.detect_objects(image)
 
 def main(args):
     detector = Detector()
