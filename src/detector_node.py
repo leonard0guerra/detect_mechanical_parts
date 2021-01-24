@@ -3,7 +3,6 @@
 import sys
 import rospy
 import message_filters
-import argparse
 from detector import Detector
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
@@ -24,7 +23,7 @@ class DetectorNode:
         rospy.Subscriber(topic_data, Image, self.callback)    
         self.__publisher = rospy.Publisher(topic_image_detection, Image, queue_size=1)
 
-        rospy.init_node('detect_mechanical_parts', anonymous=True)
+        rospy.init_node('detector_mechanical_parts', anonymous=True)
 
     def callback(self, data):
         try:
@@ -45,16 +44,9 @@ class DetectorNode:
             return
 
 def main(args):
-    parser = argparse.ArgumentParser()
-    #TODO: specify argument of help=''
-    parser.add_argument('--topic-sub', default=DetectorNode.TOPIC_DATA, required=False)
-    parser.add_argument('--topic-pub', default=DetectorNode.TOPIC_IMAGE, required=False)
-
-    args = parser.parse_args()
 
     detector_node = DetectorNode()
-    detector_node.init_node(args.topic_sub, args.topic_pub)
-    
+    detector_node.init_node(DetectorNode.TOPIC_DATA, DetectorNode.TOPIC_IMAGE)
 
     try:
         rospy.spin()

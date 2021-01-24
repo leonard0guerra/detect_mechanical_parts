@@ -1,0 +1,4 @@
+<launch>  
+    <node name="$(anon detector_mechanical_parts)" pkg="detect_mechanical_parts" type="detector_node.py" output="screen"/>     
+    <node name="$(anon visualizer)" pkg="detect_mechanical_parts" type="visualizer.py" output="screen"/> 
+</launch>
