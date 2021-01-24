@@ -10,5 +10,5 @@ ROS package to read a stream of images, detect mechanical parts of cars using YO
 
 ## Detection
 ```shell
-roslaunch detect_mechanical_parts detect_mechanical_parts.launch
+~$ roslaunch detect_mechanical_parts detect_mechanical_parts.launch
 ```
