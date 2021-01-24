@@ -9,6 +9,6 @@ ROS package to read a stream of images, detect mechanical parts of cars using YO
 * Download yolo-obj.weights and place it in the [yolo_model](yolo_model) folder
 
 ## Detection
-```console
+```shell
 roslaunch detect_mechanical_parts detect_mechanical_parts.launch
 ```
