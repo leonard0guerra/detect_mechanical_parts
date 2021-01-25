@@ -18,10 +18,9 @@ class Detector:
         self.__init_network()
     
     def __init_colors_for_classes(self):
-        self.labels = []
-        with open(Utils.absolutePath(Detector.OBJ_NAMES), "r") as f:
-            self.labels = [cname.strip() for cname in f.readlines()]
-        
+        self.labels = Utils.load_classes(Detector.OBJ_NAMES)
+
+        np.random.seed(777)
         self.bbox_colors = np.random.uniform(low=0, high=255, size=(len(self.labels), 3))
         
     

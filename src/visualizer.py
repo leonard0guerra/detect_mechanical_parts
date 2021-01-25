@@ -12,7 +12,7 @@ class Visualizer:
 
   def __init__(self, rec_video=False):
     self.__bridge = CvBridge()
-    rospy.Subscriber(DetectorNode.TOPIC_IMAGE, Image, self.callback)
+    rospy.Subscriber(DetectorNode.TOPIC_IMAGE, Image, self.view_image)
 
     self.__writer = None
     self.__rec_video = rec_video
@@ -20,14 +20,14 @@ class Visualizer:
     rospy.init_node('visualizer', anonymous=True)
 
 
-  def callback(self,data):
+  def view_image(self,data):
     try:
       image = self.__bridge.imgmsg_to_cv2(data, 'bgr8')
     except CvBridgeError as cve:
       rospy.logerr(str(cve))
       return
     
-    cv.imshow('Detection', image)
+    cv.imshow('Object Detection ', image)
     cv.waitKey(30)
    
 def main(args):

@@ -20,12 +20,13 @@ class DetectorNode:
     def init_node(self, topic_data:str, topic_image_detection:str):
         self.__bridge = CvBridge()
         
-        rospy.Subscriber(topic_data, Image, self.callback)    
+        #buffer size = 2**24 | 480*640*3
+        rospy.Subscriber(topic_data, Image, self.detect_image, queue_size=1, buff_size=2**24)    
         self.__publisher = rospy.Publisher(topic_image_detection, Image, queue_size=1)
 
         rospy.init_node('detector_mechanical_parts', anonymous=True)
 
-    def callback(self, data):
+    def detect_image(self, data):
         try:
             image = self.__bridge.imgmsg_to_cv2(data, 'bgr8')
         except CvBridgeError as cve:
