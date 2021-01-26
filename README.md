@@ -28,6 +28,5 @@ $ catkin build detect_mechanical_parts
 2. You can download [this bag](https://drive.google.com/file/d/1CngH1nSqTF9j4RZHsccH1meC1ZSXYaKp/view?usp=sharing) and run the command:
     ```shell
     $ rosbag play 20210113_161956.bag --topics /device_0/sensor_1/Color_0/image/data
-
     ```
 You can change the parameters in the [launch file](launch/detect_mechanical_parts.launch) (e.g. topics, confidence threshold value...) and launch it.
