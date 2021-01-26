@@ -4,29 +4,31 @@ from utils import Utils
 
 class Detector:
 
-    #TODO: create config. file
-    YOLO_CFG = 'yolo_model/yolo-obj.cfg'
-    YOLO_WEIGHTS = 'yolo_model/yolo-obj_6100.weights'
-    OBJ_NAMES = 'yolo_model/obj.names'
+    def __init__(self, yolo_cfg:str, yolo_weights:str, obj_names:str, conf_threshold:float = 0.3, nms_threshold:float = 0.4):
+        self.conf_threshold = conf_threshold
+        self.nms_threshold = nms_threshold
 
-    CONF_THRESHOLD = 0.3
-    NMS_THRESHOLD = 0.4
+        self.yolo_cfg = yolo_cfg
+        self.yolo_weights = yolo_weights
+        self.obj_names = obj_names
 
-
-    def __init__(self):
         self.__init_colors_for_classes()
         self.__init_network()
     
     def __init_colors_for_classes(self):
-        self.labels = Utils.load_classes(Detector.OBJ_NAMES)
+        self.labels = Utils.load_classes(self.obj_names)
 
         np.random.seed(777)
         self.bbox_colors = np.random.uniform(low=0, high=255, size=(len(self.labels), 3))
         
     
     def __init_network(self):
-        self.net = cv.dnn.readNetFromDarknet(Utils.absolutePath(Detector.YOLO_CFG), \
-                                    darknetModel=Utils.absolutePath(Detector.YOLO_WEIGHTS))
+        self.net = cv.dnn.readNetFromDarknet(Utils.absolute_path(self.yolo_cfg), \
+                                    darknetModel=Utils.absolute_path(self.yolo_weights))
+        
+        if Utils.is_cuda_cv():
+            self.net.setPreferableBackend(cv.dnn.DNN_BACKEND_CUDA)
+            self.net.setPreferableTarget(cv.dnn.DNN_TARGET_CUDA)
 
         layer_names = self.net.getLayerNames()
         self.__output_layer = [layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
@@ -48,7 +50,7 @@ class Detector:
                 classID = np.argmax(scores)
                 confidence = scores[classID]
                                         
-                if confidence > Detector.CONF_THRESHOLD:
+                if confidence > self.conf_threshold:
                     box = detection[0:4] * np.array([W, H, W, H])
                     (centerX, centerY, width, height) = box.astype("int")
                     x = int(centerX - (width / 2))
@@ -57,7 +59,7 @@ class Detector:
                     confidences.append(float(confidence))
                     classIDs.append(classID)
                                         
-        idxs = cv.dnn.NMSBoxes(boxes, confidences, score_threshold=Detector.CONF_THRESHOLD, nms_threshold=Detector.NMS_THRESHOLD)
+        idxs = cv.dnn.NMSBoxes(boxes, confidences, score_threshold=self.conf_threshold, nms_threshold=self.nms_threshold)
                                         
         if len(idxs)>0:
             for i in idxs.flatten():

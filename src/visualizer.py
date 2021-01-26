@@ -11,14 +11,15 @@ from cv_bridge import CvBridge, CvBridgeError
 class Visualizer:
 
   def __init__(self, rec_video=False):
+    rospy.init_node('visualizer', anonymous=True)
+
+    view_image_topic = rospy.get_param(f'/{rospy.get_name()}/view_image_topic')
+
     self.__bridge = CvBridge()
-    rospy.Subscriber(DetectorNode.TOPIC_IMAGE, Image, self.view_image)
+    rospy.Subscriber(view_image_topic, Image, self.view_image)
 
     self.__writer = None
     self.__rec_video = rec_video
-
-    rospy.init_node('visualizer', anonymous=True)
-
 
   def view_image(self,data):
     try:

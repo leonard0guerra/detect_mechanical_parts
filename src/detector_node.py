@@ -10,21 +10,33 @@ from cv_bridge import CvBridge, CvBridgeError
 
 class DetectorNode:
 
-    # ROS Topic 
-    TOPIC_DATA = '/device_0/sensor_1/Color_0/image/data'
-    TOPIC_IMAGE = '/detect_mechanical_parts/image_detection'
-
     def __init__(self):
-        self.detector = Detector()
+        rospy.init_node('detector_mechanical_parts', anonymous=True)
+        self.node_name = rospy.get_name()
 
-    def init_node(self, topic_data:str, topic_image_detection:str):
+        yolo_cfg = rospy.get_param(f'/{self.node_name}/yolo_cfg')
+        yolo_weights = rospy.get_param(f'/{self.node_name}/yolo_weights')
+        obj_names = rospy.get_param(f'/{self.node_name}/obj_names')
+
+        conf_threshold = float(rospy.get_param(f'/{self.node_name}/conf_threshold'))
+        nms_threshold = float(rospy.get_param(f'/{self.node_name}/nms_threshold'))
+
+        self.detector = Detector(yolo_cfg=yolo_cfg, \
+                                 yolo_weights=yolo_weights,\
+                                 obj_names=obj_names,\
+                                 conf_threshold=conf_threshold,\
+                                 nms_threshold=nms_threshold)
+        
         self.__bridge = CvBridge()
+
+        detections_image_topic = rospy.get_param(f'/{self.node_name}/detections_image_topic')
+        image_source_topic = rospy.get_param(f'/{self.node_name}/image_source_topic')
         
         #buffer size = 2**24 | 480*640*3
-        rospy.Subscriber(topic_data, Image, self.detect_image, queue_size=1, buff_size=2**24)    
-        self.__publisher = rospy.Publisher(topic_image_detection, Image, queue_size=1)
+        rospy.Subscriber(image_source_topic, Image, self.detect_image, queue_size=1, buff_size=2**24)    
+        self.__publisher = rospy.Publisher(detections_image_topic, Image, queue_size=1)
 
-        rospy.init_node('detector_mechanical_parts', anonymous=True)
+        
 
     def detect_image(self, data):
         try:
@@ -47,7 +59,6 @@ class DetectorNode:
 def main(args):
 
     detector_node = DetectorNode()
-    detector_node.init_node(DetectorNode.TOPIC_DATA, DetectorNode.TOPIC_IMAGE)
 
     try:
         rospy.spin()
