@@ -30,3 +30,7 @@ $ catkin build detect_mechanical_parts
     $ rosbag play 20210113_161956.bag --topics /device_0/sensor_1/Color_0/image/data
     ```
 You can change the parameters in the [launch file](launch/detect_mechanical_parts.launch) (e.g. topics, confidence threshold value...) and launch it.
+___
+## References
+* [Computer Vision and Machine Perception ](http://web.unibas.it/bloisi/corsi/visione-e-percezione.html) - University of Basilicata (Italy)
+* [AlexeyAB](https://github.com/AlexeyAB/darknet) darknet
