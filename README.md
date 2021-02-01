@@ -3,7 +3,7 @@
 ROS package to read a stream of images, detect mechanical parts of cars using YOLOv4 and view the detection results.
 ___
 ## Launch Requirements
-* ROS Noetic 1.15.9 (*Recommended for Ubuntu 20.04*)
+* ROS Noetic Ninjemys 1.15.9 (*Recommended for Ubuntu 20.04*)
 * Python 3.4+
 * OpenCV 4.4.0+
 * NumPy 1.17.4+
@@ -33,4 +33,6 @@ You can change the parameters in the [launch file](launch/detect_mechanical_part
 ___
 ## References
 * [Computer Vision and Machine Perception ](http://web.unibas.it/bloisi/corsi/visione-e-percezione.html) - University of Basilicata (Italy)
-* [AlexeyAB](https://github.com/AlexeyAB/darknet) darknet
+* [ROS Noetic Ninjemys](http://wiki.ros.org/noetic)
+* [Darknet](https://github.com/AlexeyAB/darknet) - AlexeyAB
+* [OpenCV](https://github.com/opencv/opencv)
