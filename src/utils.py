@@ -20,12 +20,12 @@ class Utils:
         return labels
 
     @staticmethod
-    def is_cuda_cv(): 
+    def is_cuda_cv() -> bool:
         try:
             count = cv.cuda.getCudaEnabledDeviceCount()
             if count > 0:
-                return 1
+                return True
             else:
-                return 0
+                return False
         except:
-            return 0
+            return False
